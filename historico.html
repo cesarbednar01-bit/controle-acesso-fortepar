@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Histórico de Acessos</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <h2>Controle</h2>
+
+            <span>Acesso</span>
+
+        </div>
+
+        <nav>
+
+            <a href="index.html">
+                🏠 Dashboard
+            </a>
+
+            <a href="historico.html"
+               class="active">
+                📋 Histórico
+            </a>
+
+            <a href="relatorios.html">
+                📄 Relatórios
+            </a>
+
+        </nav>
+
+        <button
+            class="logout-btn"
+            onclick="logout()">
+
+            🚪 Sair
+
+        </button>
+
+    </aside>
+
+    <!-- CONTEÚDO -->
+
+    <main class="content">
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Histórico de Acessos</h1>
+
+                <span>
+                    Consulta de entradas e saídas
+                </span>
+
+            </div>
+
+        </header>
+
+        <!-- FILTROS -->
+
+        <section class="formulario">
+
+            <h2>Filtros</h2>
+
+            <div class="filtros">
+
+                <input
+                    type="text"
+                    id="filtroNome"
+                    placeholder="Nome">
+
+                <input
+                    type="text"
+                    id="filtroDocumento"
+                    placeholder="Documento">
+
+                <input
+                    type="text"
+                    id="filtroEmpresa"
+                    placeholder="Empresa">
+
+                <button
+                    onclick="filtrarHistorico()">
+
+                    Pesquisar
+
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- TABELA -->
+
+        <section class="presentes">
+
+            <h2>Registros</h2>
+
+            <div class="table-responsive">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Nome</th>
+
+                            <th>Tipo</th>
+
+                            <th>Empresa</th>
+
+                            <th>Documento</th>
+
+                            <th>Entrada</th>
+
+                            <th>Saída</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="historicoBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="js/historico.js"></script>
+
+</body>
+
+</html>

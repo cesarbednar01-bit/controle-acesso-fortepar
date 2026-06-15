@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Acesso - Fortepar</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <img
+                src="./assets/logo-fortepar-sidebar.png.png"
+                alt="Fortepar"
+                class="logo-sidebar">
+
+            <h3>Controle de Acesso</h3>
+
+            <span>FORTEPAR</span>
+
+        </div>
+
+        <nav>
+
+            <a href="index.html" class="active">
+                🏠 Dashboard
+            </a>
+
+            <a href="historico.html">
+                📋 Histórico
+            </a>
+
+            <a href="relatorios.html">
+                📄 Relatórios
+            </a>
+
+        </nav>
+
+        <button
+            class="logout-btn"
+            onclick="logout()">
+
+            🚪 Sair
+
+        </button>
+
+    </aside>
+
+    <!-- CONTEÚDO -->
+
+    <main class="content">
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Controle de Acesso Fortepar</h1>
+
+                <span>
+                    Operações Portuárias • Bem-vindo,
+                    <strong id="nomeUsuario"></strong>
+                </span>
+
+            </div>
+
+        </header>
+
+        <!-- CARDS -->
+
+        <section class="cards">
+
+            <div class="card">
+
+                <h2 id="totalPresentes">0</h2>
+
+                <span>Pessoas Presentes</span>
+
+            </div>
+
+            <div class="card">
+
+                <h2 id="totalEntradas">0</h2>
+
+                <span>Entradas Hoje</span>
+
+            </div>
+
+            <div class="card">
+
+                <h2 id="totalSaidas">0</h2>
+
+                <span>Saídas Hoje</span>
+
+            </div>
+
+        </section>
+
+        <!-- FORMULÁRIO -->
+
+        <section class="formulario">
+
+            <h2>Registrar Entrada</h2>
+
+            <form id="formEntrada">
+
+                <input
+                    type="text"
+                    id="nome"
+                    placeholder="Nome Completo"
+                    required>
+
+                <select id="tipo">
+
+                    <option value="Funcionário">
+                        Funcionário
+                    </option>
+
+                    <option value="Visitante">
+                        Visitante
+                    </option>
+
+                    <option value="Motorista">
+                        Motorista
+                    </option>
+
+                    <option value="Prestador">
+                        Prestador
+                    </option>
+
+                </select>
+
+                <input
+                    type="text"
+                    id="empresa"
+                    placeholder="Empresa">
+
+                <select id="tipoDocumento">
+
+                    <option value="CPF">
+                        CPF
+                    </option>
+
+                    <option value="RG">
+                        RG
+                    </option>
+
+                </select>
+
+                <input
+                    type="text"
+                    id="numeroDocumento"
+                    placeholder="Número do Documento">
+
+                <select id="destino">
+
+                    <option>Portaria</option>
+
+                    <option>Escritório</option>
+
+                    <option>Armazém</option>
+
+                    <option>Pátio</option>
+
+                    <option>Refeitório</option>
+
+                </select>
+
+                <textarea
+                    id="observacao"
+                    placeholder="Observações"></textarea>
+
+                <button type="submit">
+
+                    Registrar Entrada
+
+                </button>
+
+            </form>
+
+        </section>
+
+        <!-- PESSOAS PRESENTES -->
+
+        <section class="presentes">
+
+            <h2>Pessoas Presentes</h2>
+
+            <div class="table-responsive">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Nome</th>
+
+                            <th>Tipo</th>
+
+                            <th>Empresa</th>
+
+                            <th>Documento</th>
+
+                            <th>Destino</th>
+
+                            <th>Entrada</th>
+
+                            <th>Ação</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="listaPresentes">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="js/app.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Relatórios</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <h2>Controle</h2>
+
+            <span>Acesso</span>
+
+        </div>
+
+        <nav>
+
+            <a href="index.html">
+                🏠 Dashboard
+            </a>
+
+            <a href="historico.html">
+                📋 Histórico
+            </a>
+
+            <a href="relatorios.html"
+               class="active">
+                📄 Relatórios
+            </a>
+
+        </nav>
+
+        <button
+            class="logout-btn"
+            onclick="logout()">
+
+            🚪 Sair
+
+        </button>
+
+    </aside>
+
+    <!-- CONTEÚDO -->
+
+    <main class="content">
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Relatórios</h1>
+
+                <span>
+                    Gere relatórios das entradas e saídas registradas
+                </span>
+
+            </div>
+
+        </header>
+
+        <!-- FILTROS -->
+
+        <section class="formulario">
+
+            <h2>Filtros</h2>
+
+            <div class="filtros">
+
+                <input
+                    type="date"
+                    id="dataInicial">
+
+                <input
+                    type="date"
+                    id="dataFinal">
+
+                <select id="tipo">
+
+                    <option value="">
+                        Todos os Tipos
+                    </option>
+
+                    <option value="Funcionário">
+                        Funcionário
+                    </option>
+
+                    <option value="Visitante">
+                        Visitante
+                    </option>
+
+                    <option value="Motorista">
+                        Motorista
+                    </option>
+
+                    <option value="Prestador">
+                        Prestador
+                    </option>
+
+                </select>
+
+                <input
+                    type="text"
+                    id="empresa"
+                    placeholder="Empresa">
+
+            </div>
+
+            <div class="relatorio-acoes">
+
+                <button
+                    class="btn-pdf"
+                    onclick="gerarPDF()">
+
+                    📄 Gerar PDF
+
+                </button>
+
+                <button
+                    class="btn-excel"
+                    onclick="exportarExcel()">
+
+                    📊 Exportar Excel
+
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- PRÉ-VISUALIZAÇÃO -->
+
+        <section class="presentes">
+
+            <h2>Pré-visualização dos Registros</h2>
+
+            <div class="table-responsive">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Nome</th>
+
+                            <th>Tipo</th>
+
+                            <th>Empresa</th>
+
+                            <th>Documento</th>
+
+                            <th>Destino</th>
+
+                            <th>Entrada</th>
+
+                            <th>Saída</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="previewRelatorio">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- BIBLIOTECAS PDF -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+<!-- EXCEL -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<!-- JS -->
+
+<script src="js/relatorios.js"></script>
+
+</body>
+
+</html>
