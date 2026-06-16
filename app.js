@@ -2,7 +2,8 @@ import { db } from "./firebase.js";
 
 import {
     collection,
-    addDoc
+    addDoc,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const usuarioLogado = JSON.parse(
@@ -16,12 +17,50 @@ if (!usuarioLogado) {
 let acessos =
     JSON.parse(localStorage.getItem("acessos")) || [];
 
+async function carregarAcessos() {
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(db, "acessos")
+            );
+
+        acessos = [];
+
+        snapshot.forEach(doc => {
+
+            acessos.push({
+                firebaseId: doc.id,
+                ...doc.data()
+            });
+
+        });
+
+        renderizar();
+
+        console.log(
+            `${acessos.length} acessos carregados`
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar acessos:",
+            erro
+        );
+
+        renderizar();
+    }
+}
+
+
 const form =
     document.getElementById("formEntrada");
 
 form.addEventListener("submit", registrarEntrada);
 
- async function registrarEntrada(e) {
+async function registrarEntrada(e) {
 
     e.preventDefault();
 
@@ -58,29 +97,29 @@ form.addEventListener("submit", registrarEntrada);
         status: "DENTRO"
     };
 
-   try {
+    try {
 
-    await addDoc(
-        collection(db, "acessos"),
-        acesso
-    );
+        await addDoc(
+            collection(db, "acessos"),
+            acesso
+        );
 
-    console.log("Acesso salvo no Firestore");
+        console.log("Acesso salvo no Firestore");
 
-    acessos.push(acesso);
+        acessos.push(acesso);
 
-    salvar();
+        salvar();
 
-    form.reset();
+        form.reset();
 
-    renderizar();
+        renderizar();
 
-} catch (erro) {
+    } catch (erro) {
 
-    console.error(erro);
+        console.error(erro);
 
-    alert("Erro ao salvar no Firestore");
-}
+        alert("Erro ao salvar no Firestore");
+    }
 
 }
 
@@ -176,7 +215,7 @@ function renderizar() {
         ).length;
 }
 
-renderizar();
+carregarAcessos();
 
 window.testeFirebase = async function () {
 
