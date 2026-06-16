@@ -16,8 +16,7 @@ if (!usuarioLogado) {
     window.location = "login.html";
 }
 
-let acessos =
-    JSON.parse(localStorage.getItem("acessos")) || [];
+let acessos = [];
 
 async function carregarAcessos() {
 
@@ -112,8 +111,6 @@ async function registrarEntrada(e) {
 
     acessos.push(acesso);
 
-    salvar();
-
     form.reset();
 
     renderizar();
@@ -171,8 +168,6 @@ async function registrarSaida(id) {
         );
     }
 
-    salvar();
-
     renderizar();
 
 }
@@ -180,13 +175,6 @@ async function registrarSaida(id) {
 window.registrarSaida = registrarSaida;
   
 
-function salvar() {
-
-    localStorage.setItem(
-        "acessos",
-        JSON.stringify(acessos)
-    );
-}
 
 function renderizar() {
 
