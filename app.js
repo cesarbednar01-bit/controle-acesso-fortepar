@@ -1,3 +1,10 @@
+import { db } from "./firebase.js";
+
+import {
+    collection,
+    addDoc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
 const usuarioLogado = JSON.parse(
     sessionStorage.getItem("usuarioLogado")
 );
@@ -153,3 +160,30 @@ function renderizar() {
 }
 
 renderizar();
+
+window.testeFirebase = async function () {
+
+    try {
+
+        const docRef = await addDoc(
+            collection(db, "acessos"),
+            {
+                nome: "Teste Firebase",
+                data: new Date().toISOString()
+            }
+        );
+
+        console.log(
+            "Documento criado:",
+            docRef.id
+        );
+
+        alert("Teste enviado para o Firestore!");
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        alert("Erro ao gravar no Firestore");
+    }
+};
