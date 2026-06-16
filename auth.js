@@ -62,6 +62,11 @@ function logout() {
 // VERIFICA LOGIN
 function verificarLogin() {
 
+    // Não verifica login na tela de login
+    if (window.location.pathname.includes("login.html")) {
+        return;
+    }
+
     const usuarioLogado =
         sessionStorage.getItem("usuarioLogado");
 
