@@ -21,7 +21,7 @@ const form =
 
 form.addEventListener("submit", registrarEntrada);
 
-function registrarEntrada(e) {
+ async function registrarEntrada(e) {
 
     e.preventDefault();
 
@@ -58,6 +58,15 @@ function registrarEntrada(e) {
         status: "DENTRO"
     };
 
+   try {
+
+    await addDoc(
+        collection(db, "acessos"),
+        acesso
+    );
+
+    console.log("Acesso salvo no Firestore");
+
     acessos.push(acesso);
 
     salvar();
@@ -65,6 +74,14 @@ function registrarEntrada(e) {
     form.reset();
 
     renderizar();
+
+} catch (erro) {
+
+    console.error(erro);
+
+    alert("Erro ao salvar no Firestore");
+}
+
 }
 
 function registrarSaida(id) {
