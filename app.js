@@ -3,7 +3,9 @@ import { db } from "./firebase.js";
 import {
     collection,
     addDoc,
-    getDocs
+    getDocs,
+    doc,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const usuarioLogado = JSON.parse(
@@ -97,33 +99,35 @@ async function registrarEntrada(e) {
         status: "DENTRO"
     };
 
-    try {
+   try {
 
-        await addDoc(
-            collection(db, "acessos"),
-            acesso
-        );
+    const docRef = await addDoc(
+        collection(db, "acessos"),
+        acesso
+    );
 
-        console.log("Acesso salvo no Firestore");
+    acesso.firebaseId = docRef.id;
 
-        acessos.push(acesso);
+    console.log("Acesso salvo no Firestore");
 
-        salvar();
+    acessos.push(acesso);
 
-        form.reset();
+    salvar();
 
-        renderizar();
+    form.reset();
 
-    } catch (erro) {
+    renderizar();
 
-        console.error(erro);
+} catch (erro) {
 
-        alert("Erro ao salvar no Firestore");
-    }
+    console.error(erro);
+
+    alert("Erro ao salvar no Firestore");
+}
 
 }
 
-function registrarSaida(id) {
+async function registrarSaida(id) {
 
     const acesso =
         acessos.find(a => a.id === id);
@@ -141,10 +145,40 @@ function registrarSaida(id) {
 
     acesso.status = "FORA";
 
+    try {
+
+        await updateDoc(
+            doc(
+                db,
+                "acessos",
+                acesso.firebaseId
+            ),
+            {
+                saida: acesso.saida,
+                status: "FORA"
+            }
+        );
+
+        console.log(
+            "Saída atualizada no Firestore"
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao atualizar saída:",
+            erro
+        );
+    }
+
     salvar();
 
     renderizar();
+
 }
+
+window.registrarSaida = registrarSaida;
+  
 
 function salvar() {
 
