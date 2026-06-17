@@ -1,3 +1,10 @@
+import { db } from "./firebase.js";
+
+import {
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
 // VALIDA LOGIN
 
 const usuarioLogado =
@@ -12,23 +19,55 @@ if (!usuarioLogado) {
 
 // LOGOUT
 
-function logout(){
+window.logout = function () {
 
     sessionStorage.clear();
 
     window.location = "login.html";
+};
+
+let acessos = [];
+
+// CARREGA FIRESTORE
+
+async function carregarDados() {
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(db, "acessos")
+            );
+
+        acessos = [];
+
+        snapshot.forEach(doc => {
+
+            acessos.push({
+                firebaseId: doc.id,
+                ...doc.data()
+            });
+
+        });
+
+        carregarPreview(acessos);
+
+        console.log(
+            `${acessos.length} registros carregados`
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar relatórios:",
+            erro
+        );
+    }
 }
-
-// CARREGA DADOS
-
-let acessos =
-JSON.parse(
-    localStorage.getItem("acessos")
-) || [];
 
 // CARREGA TABELA
 
-function carregarPreview(lista = acessos){
+function carregarPreview(lista = acessos) {
 
     const tbody =
     document.getElementById(
@@ -37,7 +76,7 @@ function carregarPreview(lista = acessos){
 
     tbody.innerHTML = "";
 
-    if(lista.length === 0){
+    if (lista.length === 0) {
 
         tbody.innerHTML = `
             <tr>
@@ -92,9 +131,9 @@ function carregarPreview(lista = acessos){
     });
 }
 
-// FILTRO
+// FILTROS
 
-function obterDadosFiltrados(){
+function obterDadosFiltrados() {
 
     const tipo =
     document
@@ -133,7 +172,7 @@ function obterDadosFiltrados(){
     });
 }
 
-// ATUALIZA AO DIGITAR
+// EVENTOS
 
 document
 .getElementById("tipo")
@@ -155,7 +194,7 @@ document
 
 // PDF
 
-function gerarPDF(){
+window.gerarPDF = function () {
 
     const dados =
     obterDadosFiltrados();
@@ -171,7 +210,7 @@ function gerarPDF(){
     doc.setFontSize(18);
 
     doc.text(
-        "CONTROLE DE ACESSO",
+        "CONTROLE DE ACESSO FORTEPAR",
         14,
         15
     );
@@ -210,19 +249,12 @@ function gerarPDF(){
         head: [[
 
             "Nome",
-
             "Tipo",
-
             "Empresa",
-
             "Documento",
-
             "Destino",
-
             "Entrada",
-
             "Saída",
-
             "Status"
 
         ]],
@@ -234,11 +266,11 @@ function gerarPDF(){
     doc.save(
         "Relatorio_Acessos.pdf"
     );
-}
+};
 
 // EXCEL
 
-function exportarExcel(){
+window.exportarExcel = function () {
 
     const dados =
     obterDadosFiltrados();
@@ -246,29 +278,17 @@ function exportarExcel(){
     const planilha =
     dados.map(a => ({
 
-        Nome:
-            a.nome,
-
-        Tipo:
-            a.tipo,
-
-        Empresa:
-            a.empresa,
+        Nome: a.nome,
+        Tipo: a.tipo,
+        Empresa: a.empresa,
 
         Documento:
-            `${a.tipoDocumento} ${a.documento}`,
+            `${a.tipoDocumento || ""} ${a.documento || ""}`,
 
-        Destino:
-            a.destino,
-
-        Entrada:
-            a.entrada,
-
-        Saida:
-            a.saida,
-
-        Status:
-            a.status
+        Destino: a.destino,
+        Entrada: a.entrada,
+        Saida: a.saida,
+        Status: a.status
 
     }));
 
@@ -290,8 +310,8 @@ function exportarExcel(){
         wb,
         "Relatorio_Acessos.xlsx"
     );
-}
+};
 
 // INICIALIZA
 
-carregarPreview();
+carregarDados();
