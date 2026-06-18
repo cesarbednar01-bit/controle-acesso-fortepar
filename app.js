@@ -40,15 +40,10 @@ async function carregarAcessos() {
 
         acessos.sort((a, b) => {
 
-            const dataA = new Date(
-                a.entrada.replace(",", "")
+            return (
+                converterData(b.entrada) -
+                converterData(a.entrada)
             );
-
-            const dataB = new Date(
-                b.entrada.replace(",", "")
-            );
-
-            return dataB - dataA;
 
         });
 
@@ -132,15 +127,10 @@ async function registrarEntrada(e) {
 
         acessos.sort((a, b) => {
 
-            const dataA = new Date(
-                a.entrada.replace(",", "")
+            return (
+                converterData(b.entrada) -
+                converterData(a.entrada)
             );
-
-            const dataB = new Date(
-                b.entrada.replace(",", "")
-            );
-
-            return dataB - dataA;
 
         });
 
@@ -308,6 +298,21 @@ function renderizar() {
         "totalSaidas"
     ).innerText =
         saidasHoje;
+}
+
+function converterData(dataTexto) {
+
+    if (!dataTexto) return 0;
+
+    const [data, hora] =
+        dataTexto.split(", ");
+
+    const [dia, mes, ano] =
+        data.split("/");
+
+    return new Date(
+        `${ano}-${mes}-${dia} ${hora}`
+    ).getTime();
 }
 
 carregarAcessos();
