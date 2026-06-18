@@ -136,39 +136,68 @@ function carregarPreview(lista = acessos) {
 function obterDadosFiltrados() {
 
     const tipo =
-    document
-    .getElementById("tipo")
-    .value
-    .toLowerCase();
+        document.getElementById("tipo")
+        .value
+        .toLowerCase();
 
     const empresa =
-    document
-    .getElementById("empresa")
-    .value
-    .toLowerCase();
+        document.getElementById("empresa")
+        .value
+        .toLowerCase();
+
+    const dataInicial =
+        document.getElementById("dataInicial")
+        .value;
+
+    const dataFinal =
+        document.getElementById("dataFinal")
+        .value;
 
     return acessos.filter(a => {
 
         const filtroTipo =
-
             !tipo ||
-
             (a.tipo || "")
             .toLowerCase()
             .includes(tipo);
 
         const filtroEmpresa =
-
             !empresa ||
-
             (a.empresa || "")
             .toLowerCase()
             .includes(empresa);
 
+        let filtroData = true;
+
+        if (dataInicial || dataFinal) {
+
+            if (!a.entrada) return false;
+
+            const dataRegistro =
+                a.entrada.split(",")[0]
+                .split("/")
+                .reverse()
+                .join("-");
+
+            if (dataInicial) {
+                filtroData =
+                    filtroData &&
+                    dataRegistro >= dataInicial;
+            }
+
+            if (dataFinal) {
+                filtroData =
+                    filtroData &&
+                    dataRegistro <= dataFinal;
+            }
+        }
+
         return (
             filtroTipo &&
-            filtroEmpresa
+            filtroEmpresa &&
+            filtroData
         );
+
     });
 }
 
