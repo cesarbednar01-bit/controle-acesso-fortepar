@@ -38,6 +38,21 @@ async function carregarAcessos() {
 
         });
 
+        acessos.sort((a, b) => {
+
+            const dataA = new Date(
+                a.entrada.replace(",", "")
+            );
+
+            const dataB = new Date(
+                b.entrada.replace(",", "")
+            );
+
+            return dataB - dataA;
+
+        });
+
+
         renderizar();
 
         console.log(
@@ -107,9 +122,27 @@ async function registrarEntrada(e) {
 
         acesso.firebaseId = docRef.id;
 
-        console.log("Acesso salvo no Firestore");
+        console.log(
+            "Acesso salvo no Firestore"
+        );
 
         acessos.push(acesso);
+
+        // ORDENA DO MAIS NOVO PARA O MAIS ANTIGO
+
+        acessos.sort((a, b) => {
+
+            const dataA = new Date(
+                a.entrada.replace(",", "")
+            );
+
+            const dataB = new Date(
+                b.entrada.replace(",", "")
+            );
+
+            return dataB - dataA;
+
+        });
 
         form.reset();
 
@@ -119,9 +152,10 @@ async function registrarEntrada(e) {
 
         console.error(erro);
 
-        alert("Erro ao salvar no Firestore");
+        alert(
+            "Erro ao salvar no Firestore"
+        );
     }
-
 }
 
 async function registrarSaida(id) {
