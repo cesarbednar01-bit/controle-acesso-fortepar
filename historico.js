@@ -16,6 +16,23 @@ if (!usuarioLogado) {
 
 let acessos = [];
 
+// CONVERTE DATA BR PARA TIMESTAMP
+
+function converterData(dataTexto) {
+
+    if (!dataTexto) return 0;
+
+    const [data, hora] =
+        dataTexto.split(", ");
+
+    const [dia, mes, ano] =
+        data.split("/");
+
+    return new Date(
+        `${ano}-${mes}-${dia}T${hora}`
+    ).getTime();
+}
+
 async function carregarHistorico() {
 
     try {
@@ -33,6 +50,17 @@ async function carregarHistorico() {
                 firebaseId: doc.id,
                 ...doc.data()
             });
+
+        });
+
+        // ORDENA DO MAIS NOVO PARA O MAIS ANTIGO
+
+        acessos.sort((a, b) => {
+
+            return (
+                converterData(b.entrada) -
+                converterData(a.entrada)
+            );
 
         });
 
@@ -158,6 +186,17 @@ window.filtrarHistorico = function () {
                 filtroEmpresa
             );
         });
+
+    // ORDENA RESULTADO FILTRADO
+
+    filtrados.sort((a, b) => {
+
+        return (
+            converterData(b.entrada) -
+            converterData(a.entrada)
+        );
+
+    });
 
     renderizarHistorico(
         filtrados
