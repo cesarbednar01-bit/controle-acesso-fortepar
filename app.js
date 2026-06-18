@@ -98,29 +98,29 @@ async function registrarEntrada(e) {
         status: "DENTRO"
     };
 
-   try {
+    try {
 
-    const docRef = await addDoc(
-        collection(db, "acessos"),
-        acesso
-    );
+        const docRef = await addDoc(
+            collection(db, "acessos"),
+            acesso
+        );
 
-    acesso.firebaseId = docRef.id;
+        acesso.firebaseId = docRef.id;
 
-    console.log("Acesso salvo no Firestore");
+        console.log("Acesso salvo no Firestore");
 
-    acessos.push(acesso);
+        acessos.push(acesso);
 
-    form.reset();
+        form.reset();
 
-    renderizar();
+        renderizar();
 
-} catch (erro) {
+    } catch (erro) {
 
-    console.error(erro);
+        console.error(erro);
 
-    alert("Erro ao salvar no Firestore");
-}
+        alert("Erro ao salvar no Firestore");
+    }
 
 }
 
@@ -173,7 +173,7 @@ async function registrarSaida(id) {
 }
 
 window.registrarSaida = registrarSaida;
-  
+
 
 
 function renderizar() {
@@ -192,6 +192,7 @@ function renderizar() {
 
         tbody.innerHTML += `
             <tr>
+
                 <td>${acesso.nome || "-"}</td>
 
                 <td>${acesso.tipo || "-"}</td>
@@ -215,26 +216,64 @@ function renderizar() {
                         Saída
                     </button>
                 </td>
+
             </tr>
         `;
     });
+
+    // TOTAL PRESENTES
 
     document.getElementById(
         "totalPresentes"
     ).innerText =
         presentes.length;
 
+    // DATA DE HOJE
+
+    const hoje =
+        new Date()
+            .toLocaleString("pt-BR")
+            .split(",")[0];
+
+    // ENTRADAS DE HOJE
+
+    const entradasHoje =
+        acessos.filter(a => {
+
+            if (!a.entrada)
+                return false;
+
+            return a.entrada.startsWith(
+                hoje
+            );
+
+        }).length;
+
+    // SAÍDAS DE HOJE
+
+    const saidasHoje =
+        acessos.filter(a => {
+
+            if (!a.saida)
+                return false;
+
+            return a.saida.startsWith(
+                hoje
+            );
+
+        }).length;
+
+    // ATUALIZA CARDS
+
     document.getElementById(
         "totalEntradas"
     ).innerText =
-        acessos.length;
+        entradasHoje;
 
     document.getElementById(
         "totalSaidas"
     ).innerText =
-        acessos.filter(
-            a => a.status === "FORA"
-        ).length;
+        saidasHoje;
 }
 
 carregarAcessos();
