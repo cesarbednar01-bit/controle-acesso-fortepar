@@ -8,9 +8,9 @@ import {
 // VALIDA LOGIN
 
 const usuarioLogado =
-JSON.parse(
-    sessionStorage.getItem("usuarioLogado")
-);
+    JSON.parse(
+        sessionStorage.getItem("usuarioLogado")
+    );
 
 if (!usuarioLogado) {
 
@@ -27,6 +27,23 @@ window.logout = function () {
 };
 
 let acessos = [];
+
+// CONVERTE DATA BR PARA TIMESTAMP
+
+function converterData(dataTexto) {
+
+    if (!dataTexto) return 0;
+
+    const [data, hora] =
+        dataTexto.split(", ");
+
+    const [dia, mes, ano] =
+        data.split("/");
+
+    return new Date(
+        `${ano}-${mes}-${dia}T${hora}`
+    ).getTime();
+}
 
 // CARREGA FIRESTORE
 
@@ -50,6 +67,17 @@ async function carregarDados() {
 
         });
 
+        // ORDENA DO MAIS NOVO PARA O MAIS ANTIGO
+
+        acessos.sort((a, b) => {
+
+            return (
+                converterData(b.entrada) -
+                converterData(a.entrada)
+            );
+
+        });
+
         carregarPreview(acessos);
 
         console.log(
@@ -70,9 +98,9 @@ async function carregarDados() {
 function carregarPreview(lista = acessos) {
 
     const tbody =
-    document.getElementById(
-        "previewRelatorio"
-    );
+        document.getElementById(
+            "previewRelatorio"
+        );
 
     tbody.innerHTML = "";
 
@@ -114,15 +142,11 @@ function carregarPreview(lista = acessos) {
                 <td>${acesso.saida || "-"}</td>
 
                 <td>
-
                     ${
                         acesso.status === "DENTRO"
-
                         ? '<span class="status-dentro">🟢 DENTRO</span>'
-
                         : '<span class="status-fora">🔴 FORA</span>'
                     }
-
                 </td>
 
             </tr>
@@ -153,7 +177,7 @@ function obterDadosFiltrados() {
         document.getElementById("dataFinal")
         .value;
 
-    return acessos.filter(a => {
+    const filtrados = acessos.filter(a => {
 
         const filtroTipo =
             !tipo ||
@@ -171,21 +195,25 @@ function obterDadosFiltrados() {
 
         if (dataInicial || dataFinal) {
 
-            if (!a.entrada) return false;
+            if (!a.entrada)
+                return false;
 
             const dataRegistro =
-                a.entrada.split(",")[0]
+                a.entrada
+                .split(",")[0]
                 .split("/")
                 .reverse()
                 .join("-");
 
             if (dataInicial) {
+
                 filtroData =
                     filtroData &&
                     dataRegistro >= dataInicial;
             }
 
             if (dataFinal) {
+
                 filtroData =
                     filtroData &&
                     dataRegistro <= dataFinal;
@@ -199,6 +227,19 @@ function obterDadosFiltrados() {
         );
 
     });
+
+    // ORDENA RESULTADO FILTRADO
+
+    filtrados.sort((a, b) => {
+
+        return (
+            converterData(b.entrada) -
+            converterData(a.entrada)
+        );
+
+    });
+
+    return filtrados;
 }
 
 // EVENTOS
@@ -226,15 +267,15 @@ document
 window.gerarPDF = function () {
 
     const dados =
-    obterDadosFiltrados();
+        obterDadosFiltrados();
 
     const { jsPDF } =
-    window.jspdf;
+        window.jspdf;
 
     const doc =
-    new jsPDF(
-        "landscape"
-    );
+        new jsPDF(
+            "landscape"
+        );
 
     doc.setFontSize(18);
 
@@ -255,20 +296,14 @@ window.gerarPDF = function () {
     const linhas = dados.map(a => [
 
         a.nome || "-",
-
         a.tipo || "-",
-
         a.empresa || "-",
-
         `${a.tipoDocumento || "-"} ${a.documento || "-"}`,
-
         a.destino || "-",
-
         a.entrada || "-",
-
         a.saida || "-",
-
         a.status || "-"
+
     ]);
 
     doc.autoTable({
@@ -276,7 +311,6 @@ window.gerarPDF = function () {
         startY: 30,
 
         head: [[
-
             "Nome",
             "Tipo",
             "Empresa",
@@ -285,7 +319,6 @@ window.gerarPDF = function () {
             "Entrada",
             "Saída",
             "Status"
-
         ]],
 
         body: linhas
@@ -302,32 +335,32 @@ window.gerarPDF = function () {
 window.exportarExcel = function () {
 
     const dados =
-    obterDadosFiltrados();
+        obterDadosFiltrados();
 
     const planilha =
-    dados.map(a => ({
+        dados.map(a => ({
 
-        Nome: a.nome,
-        Tipo: a.tipo,
-        Empresa: a.empresa,
+            Nome: a.nome,
+            Tipo: a.tipo,
+            Empresa: a.empresa,
 
-        Documento:
-            `${a.tipoDocumento || ""} ${a.documento || ""}`,
+            Documento:
+                `${a.tipoDocumento || ""} ${a.documento || ""}`,
 
-        Destino: a.destino,
-        Entrada: a.entrada,
-        Saida: a.saida,
-        Status: a.status
+            Destino: a.destino,
+            Entrada: a.entrada,
+            Saida: a.saida,
+            Status: a.status
 
-    }));
+        }));
 
     const ws =
-    XLSX.utils.json_to_sheet(
-        planilha
-    );
+        XLSX.utils.json_to_sheet(
+            planilha
+        );
 
     const wb =
-    XLSX.utils.book_new();
+        XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(
         wb,
@@ -340,6 +373,8 @@ window.exportarExcel = function () {
         "Relatorio_Acessos.xlsx"
     );
 };
+
+// BOTÃO PESQUISAR
 
 window.pesquisarRelatorio = function () {
 
