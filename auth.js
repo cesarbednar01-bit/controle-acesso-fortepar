@@ -3,8 +3,17 @@ const usuariosPadrao = [
         id: 1,
         nome: "Administrador",
         usuario: "admin",
-        senha: "123456",
+        senha: "Admin@2026",
         perfil: "ADMIN",
+        ativo: true
+    },
+
+    {
+        id: 2,
+        nome: "Portaria",
+        usuario: "portaria",
+        senha: "Portaria@2026",
+        perfil: "OPERADOR",
         ativo: true
     }
 ];
@@ -17,6 +26,7 @@ if (!localStorage.getItem("usuarios")) {
 }
 
 // LOGIN
+
 function login() {
 
     const usuarioDigitado =
@@ -38,7 +48,9 @@ function login() {
 
     if (!usuario) {
 
-        alert("Usuário ou senha inválidos!");
+        alert(
+            "Usuário ou senha inválidos!"
+        );
 
         return;
     }
@@ -48,39 +60,54 @@ function login() {
         JSON.stringify(usuario)
     );
 
-    window.location.href = "index.html";
+    window.location.href =
+        "index.html";
 }
 
 // LOGOUT
+
 function logout() {
 
-    sessionStorage.removeItem("usuarioLogado");
+    sessionStorage.removeItem(
+        "usuarioLogado"
+    );
 
-    window.location.href = "login.html";
+    window.location.href =
+        "login.html";
 }
 
 // VERIFICA LOGIN
+
 function verificarLogin() {
 
-    // Não verifica login na tela de login
-    if (window.location.pathname.includes("login.html")) {
+    if (
+        window.location.pathname.includes(
+            "login.html"
+        )
+    ) {
         return;
     }
 
     const usuarioLogado =
-        sessionStorage.getItem("usuarioLogado");
+        sessionStorage.getItem(
+            "usuarioLogado"
+        );
 
     if (!usuarioLogado) {
 
-        window.location.href = "login.html";
+        window.location.href =
+            "login.html";
 
         return;
     }
 
-    const usuario = JSON.parse(usuarioLogado);
+    const usuario =
+        JSON.parse(usuarioLogado);
 
     const nomeUsuario =
-        document.getElementById("nomeUsuario");
+        document.getElementById(
+            "nomeUsuario"
+        );
 
     if (nomeUsuario) {
 
@@ -89,7 +116,8 @@ function verificarLogin() {
     }
 }
 
-// Executa automaticamente
+// EXECUTA AUTOMATICAMENTE
+
 document.addEventListener(
     "DOMContentLoaded",
     verificarLogin
