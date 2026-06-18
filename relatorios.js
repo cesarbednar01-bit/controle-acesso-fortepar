@@ -312,6 +312,14 @@ window.exportarExcel = function () {
     );
 };
 
+window.pesquisarRelatorio = function () {
+
+    carregarPreview(
+        obterDadosFiltrados()
+    );
+
+};
+
 // INICIALIZA
 
 carregarDados();
